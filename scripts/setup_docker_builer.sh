@@ -23,7 +23,7 @@ function install-docker() {
 }
 
 
-
+install-docker
+dockerd --detach &
 git clone https://github.com/dash-xa/worker-vllm-vapi.git
-cd worker-vllm-vapi
 
