@@ -9,10 +9,12 @@ OpenAIvLLMEngine = OpenAIvLLMEngine(vllm_engine)
 async def handler(job):
     print("job['input'] before:", job["input"])
     
-    del job["input"]["call"]
-    del job["input"]["metadata"]
-    job["input"]["openai_input"]["stop_token_ids"] = [13]
-
+    if "input" in job and "openai_input" in job["input"]:
+        openai_input = job["input"]["openai_input"]
+        openai_input.pop("call", None)
+        openai_input.pop("metadata", None)
+        openai_input["stop_token_ids"] = [13]
+        
     print("job['input'] after:", job["input"])
     
     job_input = JobInput(job["input"])
