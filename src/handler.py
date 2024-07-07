@@ -7,9 +7,6 @@ vllm_engine = vLLMEngine()
 OpenAIvLLMEngine = OpenAIvLLMEngine(vllm_engine)
 
 async def handler(job):
-    job_input = JobInput(job["input"])
-    engine = OpenAIvLLMEngine if job_input.openai_route else vllm_engine
-    
     print("job['input'] before:", job["input"])
     
     del job["input"]["call"]
@@ -18,6 +15,9 @@ async def handler(job):
 
     print("job['input'] after:", job["input"])
     
+    job_input = JobInput(job["input"])
+    engine = OpenAIvLLMEngine if job_input.openai_route else vllm_engine
+
     results_generator = engine.generate(job_input)
     async for batch in results_generator:
         yield batch
